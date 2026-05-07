@@ -11,7 +11,7 @@ const CreateNoteSchema = z.object({
   leadId:  z.number().int().positive(),
 });
 
-// GET /api/notes/lead/:leadId
+
 export const getNotesByLead = async (req: Request, res: Response) => {
   const leadId = +req.params.leadId;
 
@@ -27,7 +27,7 @@ export const getNotesByLead = async (req: Request, res: Response) => {
   res.json(notes);
 };
 
-// POST /api/notes
+
 export const createNote = async (req: Request, res: Response) => {
   const { content, leadId } = CreateNoteSchema.parse(req.body);
 
@@ -46,12 +46,10 @@ export const createNote = async (req: Request, res: Response) => {
   res.status(201).json(note);
 };
 
-// DELETE /api/notes/:id
 export const deleteNote = async (req: Request, res: Response) => {
   const note = await prismaClient.note.findUnique({ where: { id: +req.params.id } });
   if (!note) throw new NotFoundException('Note not found', ErrorCode.NOTE_NOT_FOUND);
 
-  // Only the author or an admin may delete
   if (note.userId !== req.user!.id && req.user!.role !== 'admin') {
     throw new ForbiddenException('Not authorized to delete this note', ErrorCode.FORBIDDEN);
   }

@@ -6,7 +6,7 @@ import { createLead, deleteLead, getLeadById, getLeads, updateLead, updateLeadSt
 
 const leadsRouter: Router = Router();
 
-leadsRouter.use(authMiddleware); // all lead routes require login
+leadsRouter.use(authMiddleware);
 
 leadsRouter.get('/',           errorHandler(getLeads));
 leadsRouter.get('/:id',        errorHandler(getLeadById));

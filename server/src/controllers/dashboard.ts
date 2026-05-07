@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { prismaClient } from '..';
 
-// GET /api/dashboard/stats
 export const getDashboardStats = async (req: Request, res: Response) => {
   const [
     totalLeads,
@@ -49,15 +48,12 @@ export const getDashboardStats = async (req: Request, res: Response) => {
     }),
   ]);
 
-  // Map status counts
   const byStatus: Record<string, number> = {};
   statusGroups.forEach(g => { byStatus[g.status] = g._count.status; });
 
-  // Map source counts
   const bySource: Record<string, number> = {};
   sourceGroups.forEach(g => { bySource[g.source] = g._count.source; });
 
-  // Enrich top salespeople with names
   const userIds = topSalespeople
     .filter(g => g.assignedToId != null)
     .map(g => g.assignedToId!);

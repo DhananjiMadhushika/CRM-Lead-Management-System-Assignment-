@@ -5,7 +5,6 @@ import { ErrorCode } from '../exceptions/root';
 import { CreateLeadSchema, UpdateLeadSchema, UpdateStatusSchema } from '../schema/leads';
 
 
-// GET /api/leads
 export const getLeads = async (req: Request, res: Response) => {
   const { status, source, assignedToId, search, page = '1', limit = '20' } = req.query;
 
@@ -50,7 +49,6 @@ export const getLeads = async (req: Request, res: Response) => {
   });
 };
 
-// GET /api/leads/:id
 export const getLeadById = async (req: Request, res: Response) => {
   const lead = await prismaClient.lead.findUnique({
     where:   { id: +req.params.id },
@@ -67,7 +65,7 @@ export const getLeadById = async (req: Request, res: Response) => {
   res.json(lead);
 };
 
-// POST /api/leads
+
 export const createLead = async (req: Request, res: Response) => {
   const data = CreateLeadSchema.parse(req.body);
 
@@ -85,7 +83,7 @@ export const createLead = async (req: Request, res: Response) => {
   res.status(201).json(lead);
 };
 
-// PUT /api/leads/:id
+
 export const updateLead = async (req: Request, res: Response) => {
   const existing = await prismaClient.lead.findUnique({ where: { id: +req.params.id } });
   if (!existing) throw new NotFoundException('Lead not found', ErrorCode.LEAD_NOT_FOUND);
@@ -101,7 +99,7 @@ export const updateLead = async (req: Request, res: Response) => {
   res.json(lead);
 };
 
-// PATCH /api/leads/:id/status
+
 export const updateLeadStatus = async (req: Request, res: Response) => {
   const existing = await prismaClient.lead.findUnique({ where: { id: +req.params.id } });
   if (!existing) throw new NotFoundException('Lead not found', ErrorCode.LEAD_NOT_FOUND);
@@ -117,7 +115,7 @@ export const updateLeadStatus = async (req: Request, res: Response) => {
   res.json(lead);
 };
 
-// DELETE /api/leads/:id
+
 export const deleteLead = async (req: Request, res: Response) => {
   const existing = await prismaClient.lead.findUnique({ where: { id: +req.params.id } });
   if (!existing) throw new NotFoundException('Lead not found', ErrorCode.LEAD_NOT_FOUND);

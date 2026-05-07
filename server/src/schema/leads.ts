@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-// These must exactly match your Prisma LeadSource enum
+
 const LeadSourceEnum = z.enum([
   'WEBSITE',
   'LINKEDIN',
   'REFERRAL',
-  'COLD_EMAIL',   // ← your Prisma schema uses COLD_EMAIL (not COLD_CALL)
+  'COLD_EMAIL',  
   'EVENT',
   'OTHER',
 ]);

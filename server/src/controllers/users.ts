@@ -6,7 +6,7 @@ import { ErrorCode } from '../exceptions/root';
 import { compareSync, hashSync } from 'bcryptjs';
 import { z } from 'zod';
 
-// GET /api/users  — for the "assign to" dropdown in the frontend
+
 export const getUsers = async (req: Request, res: Response) => {
   const users = await prismaClient.user.findMany({
     select:  { id: true, name: true, email: true, role: true },
@@ -15,11 +15,10 @@ export const getUsers = async (req: Request, res: Response) => {
   res.json(users);
 };
 
-// PATCH /api/users/:id/profile  — update name and email
 export const updateProfile = async (req: Request, res: Response) => {
   const targetId = +req.params.id;
 
-  // Users can only update their own profile; admins can update anyone
+
   if (req.user!.id !== targetId && req.user!.role !== 'admin') {
     return res.status(403).json({ message: 'Forbidden' });
   }
@@ -31,7 +30,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 
   const data = schema.parse(req.body);
 
-  // Check email uniqueness if being changed
+
   if (data.email) {
     const existing = await prismaClient.user.findFirst({
       where: { email: data.email, NOT: { id: targetId } },
@@ -50,11 +49,9 @@ export const updateProfile = async (req: Request, res: Response) => {
   res.json(user);
 };
 
-// PATCH /api/users/:id/password  — change password
 export const updatePassword = async (req: Request, res: Response) => {
   const targetId = +req.params.id;
 
-  // Only the account owner can change their password
   if (req.user!.id !== targetId) {
     return res.status(403).json({ message: 'Forbidden' });
   }
