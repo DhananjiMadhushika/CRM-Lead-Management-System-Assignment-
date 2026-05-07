@@ -1,0 +1,78 @@
+/* .swiper-pagination-bullet {
+    background-color: #4CAF50; 
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #db5618; 
+  }
+
+  .swiper-button-next,
+.swiper-button-prev {
+  width: 24px; 
+  height: 24px;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 28px;
+  font-weight: 900;
+} */
+
+
+/* Custom Swiper Navigation Arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: #8d8d8d6c; /* Green background for the circle */
+  width: 36px; /* Size of the circle */
+  height: 36px; /* Size of the circle */
+  border-radius: 50%; /* Make it round */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Arrow color */
+  transition: background-color 0.3s ease;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+@keyframes popup-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-popup-enter {
+  animation: popup-enter 0.5s ease-out;
+}
+
+/* Animation delays for decorative elements */
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+/* Ensure popup stays on top */
+.popup-overlay {
+  z-index: 9999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .popup-container {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+}

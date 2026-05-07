@@ -1,0 +1,71 @@
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+enum LeadSource {
+  WEBSITE
+  LINKEDIN
+  REFERRAL
+  COLD_EMAIL
+  EVENT
+  OTHER
+}
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique        // no two users with same email
+  password  String                  // stored as bcrypt hash, NEVER plain text
+  role      String   @default("salesperson")
+
+  leads     Lead[]   @relation("AssignedLeads")  // one user → many leads
+  notes     Note[]                               // one user → many notes
+}
+
+model Lead {
+  id           Int        @id @default(autoincrement())
+  name         String
+  company      String
+  email        String
+  phone        String
+  source       LeadSource @default(WEBSITE)   // enum value
+  status       LeadStatus @default(NEW)       // enum value
+  dealValue    Decimal    @db.Decimal(10, 2)  // stores $99999999.99
+  priority     Priority   @default(MEDIUM)
+  assignedToId Int?                           // ? means optional (nullable)
+  assignedTo   User?      @relation("AssignedLeads", fields: [assignedToId], references: [id])
+  notes        Note[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt          // auto-updates on every save
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text               // allows long text
+  leadId    Int
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  // onDelete: Cascade → when a lead is deleted, all its notes are deleted too
+  userId    Int
+  createdBy User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
